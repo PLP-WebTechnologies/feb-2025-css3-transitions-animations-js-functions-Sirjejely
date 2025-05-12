@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Preferences</title>
+    <style>
+        :root {
+            --animation-duration: 1s;
+            --animation-type: spin;
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: #007bff;
+            margin: 20px;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+        }
+
+        @keyframes fade {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .animate {
+            animation: var(--animation-type) var(--animation-duration) linear infinite;
+        }
+
+        .preference-panel {
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="preference-panel">
+        <h2>Animation Preferences</h2>
+        <label>
+            Animation Type:
+            <select id="animationType">
+                <option value="spin">Spin</option>
+                <option value="bounce">Bounce</option>
+                <option value="fade">Fade</option>
+            </select>
+        </label>
+
+        <label>
+            Animation Speed:
+            <select id="animationSpeed">
+                <option value="0.5">Fast</option>
+                <option value="1">Normal</option>
+                <option value="2">Slow</option>
+            </select>
+        </label>
+
+        <button onclick="savePreferences()">Save Preferences</button>
+    </div>
+
+    <div class="box animate"></div>
+
+    <script>
+        // Load saved preferences
+        function loadPreferences() {
+            const defaults = {
+                type: 'spin',
+                speed: '1'
+            };
+            
+            const preferences = JSON.parse(localStorage.getItem('animationPreferences')) || defaults;
+            
+            document.getElementById('animationType').value = preferences.type;
+            document.getElementById('animationSpeed').value = preferences.speed;
+            applyPreferences(preferences);
+        }
+
+        // Save preferences to localStorage
+        function savePreferences() {
+            const preferences = {
+                type: document.getElementById('animationType').value,
+                speed: document.getElementById('animationSpeed').value
+            };
+
+            localStorage.setItem('animationPreferences', JSON.stringify(preferences));
+            applyPreferences(preferences);
+            alert('Preferences saved!');
+        }
+
+        // Apply animation preferences
+        function applyPreferences(prefs) {
+            document.documentElement.style.setProperty('--animation-duration', `${prefs.speed}s`);
+            document.documentElement.style.setProperty('--animation-type', prefs.type);
+        }
+
+        // Load preferences when page loads
+        window.addEventListener('DOMContentLoaded', loadPreferences);
+        const preferences = {
+    type: 'spin',
+    speed: 1,
+    color: '#007bff',
+    direction: 'normal',
+    enabled: true
+};
+    </script>
+</body>
+</html>
